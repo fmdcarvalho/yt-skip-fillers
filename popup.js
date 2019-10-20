@@ -1,5 +1,5 @@
-chrome.storage.sync.get(['subs'], function(res) {
-  console.log('Value is set to ', res);
+chrome.storage.sync.get(['activeVideo'], function(res) {
+  $('#ski').val(res['activeVideo'].ski);
 });
 
 
@@ -30,15 +30,6 @@ $(function(){
       });
     });
   }
-
-  chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-      console.log(request.action);
-      if (request.action == "updateski"){
-        $('#ski').val(request.ski)
-        sendResponse({response: true});
-      }
-      return true;
-  });
 
   document.getElementById('action-update').addEventListener('click', callUpdate);
   document.getElementById('action-ski').addEventListener('click', updateSki);

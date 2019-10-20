@@ -44,6 +44,8 @@ let saveSki = function(ski){
     chrome.storage.sync.set(res, function() {
       console.log('Subs set');
     });
+    chrome.storage.sync.set({'activeVideo': res[name]}, function() {
+    });
   });
 }
 
@@ -78,7 +80,10 @@ let handleElementChange = async function(){
         console.log('Found ', res);
         if(res[$ref.html()].ski >= 0){
           console.log(res[$ref.html()].ski);
-          document.getElementsByTagName('video')[0].currentTime = res[$ref.html()].ski;
+          document.getElementsByTagName('video')[0].currentTime = res[$ref.html()].ski
+          chrome.storage.sync.set({"activeVideo": res[$ref.html()]}, function() {
+            console.log('active set');
+          });
         }
       });
   });
