@@ -39,13 +39,23 @@ let update = function(){
 let saveSki = function(ski){
   let name = $('#channel-name').find('a').first().html();
   chrome.storage.sync.get([name], function(res) {
-    res[name].ski = ski;
-    console.log(res);
-    chrome.storage.sync.set(res, function() {
-      console.log('Subs set');
-    });
-    chrome.storage.sync.set({'activeVideo': res[name]}, function() {
-    });
+    if(res[name]){
+
+      res[name].ski = ski;
+      console.log(res);
+      chrome.storage.sync.set(res, function() {
+        console.log('Subs set');
+      });
+      chrome.storage.sync.set({'activeVideo': res[name]}, function() {
+      });
+    }
+    else {
+      let href = $('#channel-name').find('a').first().attr('href');
+      let item = {};
+      item[name] = {'n':name, 'href':href, 'ski':ski}
+      chrome.storage.sync.set(item, function() {
+      });
+    }
   });
 }
 
@@ -78,6 +88,9 @@ let handleElementChange = async function(){
       console.log($ref.html());
       chrome.storage.sync.get([$ref.html()], function(res) {
         console.log('Found ', res);
+        if(!res[$ref.html()]){
+          return
+        }
         if(res[$ref.html()].ski >= 0){
           console.log(res[$ref.html()].ski);
           document.getElementsByTagName('video')[0].currentTime = res[$ref.html()].ski
